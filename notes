@@ -1,0 +1,49 @@
+
+sudo dnf install java-11-amazon-corretto
+
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf upgrade
+# Add required dependencies for the jenkins package
+sudo dnf install fontconfig java-17-openjdk
+sudo dnf install jenkins
+sudo systemctl daemon-reload
+
+
+
+
+
+devuser
+
+
+
+admin
+admin@123
+
+
+
+
+
+
+without sudo
+sudo usermod -a -G docker devuser
+
+
+
+
+
+rsync -avh /var/lib/jenkins/workspace/do-doc-1 devuser@172.31.18.140:/opt
+rsync -avh $WORKSPACE/ devuser@172.31.18.140:/home/devuser/opt
+
+
+
+
+cd /home/devuser/opt
+docker image build -t $JOB_NAME:v1.$BUILD_ID .
+docker image tag $JOB_NAME:v1.$BUILD_ID codesdebugger74/$JOB_NAME:v1.$BUILD_ID
+docker image tag $JOB_NAME:v1.$BUILD_ID codesdebugger74/$JOB_NAME:latest
+sudo docker push codesdebugger74/$JOB_NAME:v1.$BUILD_ID
+sudo docker push codesdebugger74/$JOB_NAME:latest
+docker rmi $JOB_NAME:v1.$BUILD_ID codesdebugger74/$JOB_NAME:v1.$BUILD_ID codesdebugger74/$JOB_NAME:latest
