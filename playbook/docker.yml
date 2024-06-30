@@ -1,0 +1,12 @@
+---
+	- hosts: all
+	  tasks:
+		- name: stop container
+		  shell: docker stop local-server
+		- name: remove container
+		  shell: docker rm local-server
+		- name: remove image
+		  shell: docker rmi codesdebugger74/do-doc-1
+		- name: create container
+		  shell: docker run -itd --name local-server -p 80:80 codesdebugger74/do-doc-1
+...
